@@ -1,31 +1,29 @@
 package controllers
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/GuilhermeRX/API-StarWars/services"
+	"github.com/gin-gonic/gin"
+)
 
 func FindAll(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"method": "findAll",
-	})
+	var p = services.FindAll()
+	c.JSON(200, p)
+
 }
 
 func FindByID(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"method": "findById",
-	})
+	c.JSON(200, services.FindByID())
 }
 
 func Create(c *gin.Context) {
-	c.JSON(201, gin.H{
-		"method": "Create",
-	})
+	c.JSON(201, services.Create())
 }
 
 func Update(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"method": "update",
-	})
+	c.JSON(200, services.Update())
 }
 
 func Delete(c *gin.Context) {
+	services.Delete()
 	c.Status(204)
 }
