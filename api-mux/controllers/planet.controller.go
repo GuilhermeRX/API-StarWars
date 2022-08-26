@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"strconv"
+
 	"github.com/GuilhermeRX/API-StarWars/services"
 	"github.com/gin-gonic/gin"
 )
@@ -12,7 +14,15 @@ func FindAll(c *gin.Context) {
 }
 
 func FindByID(c *gin.Context) {
-	c.JSON(200, services.FindByID())
+	id := c.Param("id")
+	newid, err := strconv.Atoi(id)
+
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "ID has to be integer",
+		})
+	}
+	c.JSON(200, services.FindByID(newid))
 }
 
 func Create(c *gin.Context) {

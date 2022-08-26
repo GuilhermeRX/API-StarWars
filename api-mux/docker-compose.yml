@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  db:
+    build: .
+    container_name: mongo-db
+    restart: 'always'
+    ports:
+      - "27017:27017"

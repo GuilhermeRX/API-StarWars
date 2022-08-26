@@ -1,25 +1,23 @@
 package services
 
+import (
+	"github.com/GuilhermeRX/API-StarWars/models"
+)
+
 type Service struct {
 	Method string
 }
 
-func FindAll() Service {
-	return Service{
-		Method: "findAll",
-	}
+func FindAll() []models.Planet {
+	return models.FindAll()
 }
 
-func FindByID() Service {
-	return Service{
-		Method: "findById",
-	}
+func FindByID(id int) models.Planet {
+	return models.FindByID(id)
 }
 
-func Create() Service {
-	return Service{
-		Method: "create",
-	}
+func Create() interface{} {
+	return models.Create()
 }
 
 func Update() Service {
