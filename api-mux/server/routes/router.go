@@ -10,7 +10,11 @@ func ConfigRoutes(router *gin.Engine) *gin.Engine {
 	{
 		planets := main.Group("planets")
 		{
-			planets.GET("/", controllers.ShowBook)
+			planets.GET("/", controllers.FindAll)
+			planets.GET("/:id", controllers.FindByID)
+			planets.POST("/", controllers.Create)
+			planets.PUT("/:id", controllers.Update)
+			planets.DELETE("/:id", controllers.Delete)
 		}
 	}
 
