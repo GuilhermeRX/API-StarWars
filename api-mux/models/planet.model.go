@@ -57,13 +57,7 @@ func FindByID(id int) Planet {
 	return result
 }
 
-func Create() interface{} {
-	planet := Planet{
-		ID:      Count() + 1,
-		Name:    "Terra",
-		Clima:   "Árido",
-		Terreno: "Rochoso",
-	}
+func Create(planet Planet) Planet {
 	_, err := Db().InsertOne(context.Background(), planet)
 	if err != nil {
 		panic(err)

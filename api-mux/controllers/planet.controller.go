@@ -3,6 +3,7 @@ package controllers
 import (
 	"strconv"
 
+	"github.com/GuilhermeRX/API-StarWars/models"
 	"github.com/GuilhermeRX/API-StarWars/services"
 	"github.com/gin-gonic/gin"
 )
@@ -26,7 +27,9 @@ func FindByID(c *gin.Context) {
 }
 
 func Create(c *gin.Context) {
-	c.JSON(201, services.Create())
+	var planet models.Planet
+	c.ShouldBind(&planet)
+	c.JSON(201, services.Create(planet))
 }
 
 func Update(c *gin.Context) {
