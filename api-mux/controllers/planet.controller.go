@@ -54,6 +54,14 @@ func Create(c *gin.Context) {
 	var planet models.Planet
 	c.ShouldBind(&planet)
 
+	err := services.ValidateStruct(planet)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
 	planetCreated, err := services.Create(planet)
 
 	if err != nil {

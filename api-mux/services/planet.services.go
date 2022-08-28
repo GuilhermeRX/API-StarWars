@@ -1,11 +1,19 @@
 package services
 
 import (
+	"errors"
+
 	"github.com/GuilhermeRX/API-StarWars/models"
+	"github.com/asaskevich/govalidator"
 )
 
-type Service struct {
-	Method string
+func ValidateStruct(planet models.Planet) error {
+
+	_, err := govalidator.ValidateStruct(planet)
+	if err != nil {
+		return errors.New("Data was sent incorrectly")
+	}
+	return nil
 }
 
 func FindAll() []models.Planet {
