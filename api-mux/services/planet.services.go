@@ -16,6 +16,10 @@ func FindByID(id int) models.Planet {
 	return models.FindByID(id)
 }
 
+func FindByName(name string) []models.Planet {
+	return models.FindByName(name)
+}
+
 func Create(planet models.Planet) models.Planet {
 	newPlanet := models.Planet{
 		ID:      models.Count() + 1,

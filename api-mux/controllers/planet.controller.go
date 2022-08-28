@@ -9,6 +9,12 @@ import (
 )
 
 func FindAll(c *gin.Context) {
+	string, bool := c.GetQuery("name")
+	if bool == true {
+		var filterName = services.FindByName(string)
+		c.JSON(200, filterName)
+		return
+	}
 	var p = services.FindAll()
 	c.JSON(200, p)
 

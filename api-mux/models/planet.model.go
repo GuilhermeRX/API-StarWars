@@ -17,12 +17,6 @@ type Planet struct {
 	Terreno string `json:"terreno"`
 }
 
-// type AllPlanets []Planet
-
-// func db() {
-
-// }
-
 func FindAll() []Planet {
 	cur, err := Db().Find(context.Background(), bson.D{})
 	if err != nil {
@@ -55,6 +49,28 @@ func FindByID(id int) Planet {
 		panic(err)
 	}
 	return result
+}
+
+func FindByName(name string) []Planet {
+	filter := bson.D{{Key: "name", Value: name}}
+
+	cur, err := Db().Find(context.Background(), filter)
+	if err != nil {
+		panic(err)
+	}
+
+	defer cur.Close(context.Background())
+	var planets []Planet
+	for cur.Next(context.Background()) {
+		// To decode into a struct, use cursor.Decode()
+
+		err := cur.All(context.Background(), &planets)
+
+		if err != nil {
+			panic(err)
+		}
+	}
+	return planets
 }
 
 func Create(planet Planet) Planet {
