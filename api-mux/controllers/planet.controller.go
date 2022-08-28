@@ -11,7 +11,15 @@ import (
 func FindAll(c *gin.Context) {
 	string, bool := c.GetQuery("name")
 	if bool == true {
-		var filterName = services.FindByName(string)
+		var filterName, err = services.FindByName(string)
+
+		if err != nil {
+			c.JSON(400, gin.H{
+				"message": err.Error(),
+			})
+			return
+		}
+
 		c.JSON(200, filterName)
 		return
 	}
@@ -26,17 +34,35 @@ func FindByID(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(400, gin.H{
-			"error": "ID has to be integer",
+			"message": "ID has to be integer",
 		})
 		return
 	}
-	c.JSON(200, services.FindByID(newid))
+
+	planet, err := services.FindByID(newid)
+
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+	c.JSON(200, planet)
 }
 
 func Create(c *gin.Context) {
 	var planet models.Planet
 	c.ShouldBind(&planet)
-	c.JSON(201, services.Create(planet))
+
+	planetCreated, err := services.Create(planet)
+
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+	}
+
+	c.JSON(201, planetCreated)
 }
 
 func Delete(c *gin.Context) {

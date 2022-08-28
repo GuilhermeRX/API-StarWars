@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -42,45 +43,37 @@ func Count() int {
 	return len(FindAll())
 }
 
-func FindByID(id int) Planet {
+func FindByID(id int) (Planet, error) {
 	filter := bson.D{{Key: "id", Value: id}}
 	result := Planet{}
 	err := Db().FindOne(context.Background(), filter).Decode(&result)
+
 	if err != nil {
-		panic(err)
+		return result, errors.New("ID does not exist")
 	}
-	return result
+	return result, nil
 }
 
-func FindByName(name string) []Planet {
+func FindByName(name string) (Planet, error) {
 	filter := bson.D{{Key: "name", Value: name}}
 
-	cur, err := Db().Find(context.Background(), filter)
+	result := Planet{}
+	err := Db().FindOne(context.Background(), filter).Decode(&result)
+
 	if err != nil {
-		panic(err)
+		return result, errors.New("There is no planet with that name")
 	}
-
-	defer cur.Close(context.Background())
-	var planets []Planet
-	for cur.Next(context.Background()) {
-		// To decode into a struct, use cursor.Decode()
-
-		err := cur.All(context.Background(), &planets)
-
-		if err != nil {
-			panic(err)
-		}
-	}
-	return planets
+	return result, nil
 }
 
-func Create(planet Planet) Planet {
+func Create(planet Planet) (Planet, error) {
 	_, err := Db().InsertOne(context.Background(), planet)
+
 	if err != nil {
-		panic(err)
+		return planet, errors.New("An error occurred while inserting")
 	}
 
-	return planet
+	return planet, nil
 }
 
 func Delete(id int) {

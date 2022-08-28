@@ -12,15 +12,15 @@ func FindAll() []models.Planet {
 	return models.FindAll()
 }
 
-func FindByID(id int) models.Planet {
+func FindByID(id int) (models.Planet, error) {
 	return models.FindByID(id)
 }
 
-func FindByName(name string) []models.Planet {
+func FindByName(name string) (models.Planet, error) {
 	return models.FindByName(name)
 }
 
-func Create(planet models.Planet) models.Planet {
+func Create(planet models.Planet) (models.Planet, error) {
 	newPlanet := models.Planet{
 		ID:      models.Count() + 1,
 		Name:    planet.Name,
