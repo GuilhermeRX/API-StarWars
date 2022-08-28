@@ -28,6 +28,7 @@ func FindByID(c *gin.Context) {
 		c.JSON(400, gin.H{
 			"error": "ID has to be integer",
 		})
+		return
 	}
 	c.JSON(200, services.FindByID(newid))
 }
@@ -38,11 +39,17 @@ func Create(c *gin.Context) {
 	c.JSON(201, services.Create(planet))
 }
 
-func Update(c *gin.Context) {
-	c.JSON(200, services.Update())
-}
-
 func Delete(c *gin.Context) {
-	services.Delete()
+	id := c.Param("id")
+	newid, err := strconv.Atoi(id)
+
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "ID has to be integer",
+		})
+		return
+	}
+
+	services.Delete(newid)
 	c.Status(204)
 }

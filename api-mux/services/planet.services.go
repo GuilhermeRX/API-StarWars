@@ -30,12 +30,6 @@ func Create(planet models.Planet) models.Planet {
 	return models.Create(newPlanet)
 }
 
-func Update() Service {
-	return Service{
-		Method: "update",
-	}
-}
-
-func Delete() {
-	return
+func Delete(id int) {
+	models.Delete(id)
 }

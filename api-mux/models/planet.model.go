@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -82,10 +83,10 @@ func Create(planet Planet) Planet {
 	return planet
 }
 
-// func Update() {
-
-// }
-
-// func Delete() {
-// 	return
-// }
+func Delete(id int) {
+	res, err := Db().DeleteOne(context.TODO(), bson.D{{Key: "id", Value: id}})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("deleted %v documents\n", res.DeletedCount)
+}
