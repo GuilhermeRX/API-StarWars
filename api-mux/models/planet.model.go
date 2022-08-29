@@ -3,7 +3,6 @@ package models
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -29,7 +28,6 @@ func FindAll() []Planet {
 	defer cur.Close(context.Background())
 	var planets []Planet
 	for cur.Next(context.Background()) {
-		// To decode into a struct, use cursor.Decode()
 
 		err := cur.All(context.Background(), &planets)
 
@@ -55,16 +53,25 @@ func FindByID(id int) (Planet, error) {
 	return result, nil
 }
 
-func FindByName(name string) (Planet, error) {
-	filter := bson.D{{Key: "name", Value: name}}
-
-	result := Planet{}
-	err := Db().FindOne(context.Background(), filter).Decode(&result)
+func FindByName(name string) ([]Planet, error) {
+	filter := bson.D{{Key: "name", Value: bson.D{{Key: "$regex", Value: name}}}}
+	cur, err := Db().Find(context.Background(), filter)
 
 	if err != nil {
-		return result, errors.New("There is no planet with that name")
+		return []Planet{}, err
 	}
-	return result, nil
+
+	defer cur.Close(context.Background())
+	var planets []Planet
+	for cur.Next(context.Background()) {
+
+		err := cur.All(context.Background(), &planets)
+
+		if err != nil {
+			return []Planet{}, err
+		}
+	}
+	return planets, nil
 }
 
 func Create(planet Planet) (Planet, error) {
@@ -77,10 +84,10 @@ func Create(planet Planet) (Planet, error) {
 	return planet, nil
 }
 
-func Delete(id int) {
+func Delete(id int) (int64, error) {
 	res, err := Db().DeleteOne(context.TODO(), bson.D{{Key: "id", Value: id}})
 	if err != nil {
-		panic(err)
+		return 0, errors.New("Error when deleting a planet")
 	}
-	fmt.Printf("deleted %v documents\n", res.DeletedCount)
+	return res.DeletedCount, nil
 }

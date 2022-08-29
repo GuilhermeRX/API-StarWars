@@ -11,20 +11,21 @@ import (
 func FindAll(c *gin.Context) {
 	string, bool := c.GetQuery("name")
 	if bool == true {
-		var filterName, err = services.FindByName(string)
+		var planetsForName, err = services.FindByName(string)
 
-		if err != nil {
+		if len(planetsForName) == 0 || err != nil {
 			c.JSON(400, gin.H{
-				"message": err.Error(),
+				"message": "No planets found in the search",
 			})
 			return
 		}
 
-		c.JSON(200, filterName)
+		c.JSON(200, planetsForName)
 		return
 	}
-	var p = services.FindAll()
-	c.JSON(200, p)
+	var planets = services.FindAll()
+
+	c.JSON(200, planets)
 
 }
 
@@ -84,6 +85,21 @@ func Delete(c *gin.Context) {
 		return
 	}
 
-	services.Delete(newid)
+	row, err := services.Delete(newid)
+
+	if int64(row) == 0 {
+		c.JSON(400, gin.H{
+			"message": "ID does not exist",
+		})
+		return
+	}
+
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
 	c.Status(204)
 }
