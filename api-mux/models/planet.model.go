@@ -13,10 +13,11 @@ type PlanetId struct {
 }
 
 type Planet struct {
-	ID      int    `json:"id,omitempty" valid:"optional"`
-	Name    string `json:"name" valid:"type(string)"`
-	Clima   string `json:"clima" valid:"type(string)"`
-	Terreno string `json:"terreno" valid:"type(string)"`
+	ID               int    `json:"id,omitempty" valid:"optional"`
+	Name             string `json:"name" valid:"type(string)"`
+	Climate          string `json:"climate" valid:"type(string)"`
+	Terrain          string `json:"terrain" valid:"type(string)"`
+	MovieAppearances int    `json:"movieAppearances" valid:"optional"`
 }
 
 func FindAll() []Planet {
