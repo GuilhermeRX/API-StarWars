@@ -18,3 +18,7 @@
 
 - Remover planeta - api/v1/planets/id
 
+### Tecnologias Utilizadas
+- Golang
+- MongoDB
+- Docker
