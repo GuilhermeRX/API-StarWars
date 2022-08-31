@@ -11,11 +11,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// Não consegui realizar os mocks necessários para que o teste deixe de acessar o banco de dados ;/
 func TestFindAllRoute(t *testing.T) {
 	gin.SetMode(gin.TestMode)
-
 	router := gin.Default()
-	router.GET("/", controllers.FindAll)
+	router.GET("/", FindAllMock)
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/", nil)
@@ -23,7 +23,8 @@ func TestFindAllRoute(t *testing.T) {
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, 200, w.Code)
-	// assert.Equal(t, "pong", w.Body.String())
+
+	assert.Equal(t, string(AllPlanets), w.Body.String())
 
 }
 
